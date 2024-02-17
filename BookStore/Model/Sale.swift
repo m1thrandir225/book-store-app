@@ -41,6 +41,39 @@ struct Sale: Identifiable, Equatable {
         
         return exampleSales.sorted { $0.saleDate < $1.saleDate }
     }
+    
+    static var higherWeekendThreeMonthsExample: [Sale] = {
+        let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: Date())!
+        
+        
+        let exampleSales: [Sale] = (1...300).map { _ in
+            let randomBook = Book.examples.randomElement()!
+            
+            let randomDate = Date.random(in: threeMonthsAgo...Date())
+            
+            let weekday = Calendar.current.component(.weekday, from: randomDate)
+            
+            var average: Int = 35
+            switch weekday {
+                case 1: average = 29
+                case 2: average = 21
+                case 3: average = 38
+                case 4: average = 25
+                case 5: average = 30
+                case 6: average = 50
+                case 7: average = 60
+                default:
+                    average = 10
+            }
+            
+            let randomQuantity = (1...20).reduce(0) { acc, _ in acc + Int.random(in: 1...(average * 2))} / 12
+        
+            
+            return Sale(id: UUID(), book: randomBook, quantity: randomQuantity, saleDate: randomDate)
+        }
+        
+        return exampleSales.sorted { $0.saleDate < $1.saleDate }
+    }()
 }
 
 
